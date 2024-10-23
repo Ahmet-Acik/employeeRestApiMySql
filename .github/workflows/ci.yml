@@ -35,7 +35,13 @@ jobs:
       - name: Start MySQL service
         run: sudo service mysql start
 
+      - name: Check MySQL root user credentials
+        run: |
+          mysql -u root -proot7623 -e 'SELECT 1;'
+        continue-on-error: true
+
       - name: Create database
+        if: success()
         run: |
           mysql -u root -proot7623 -e 'CREATE DATABASE ems;'
           mysql -u root -proot7623 -e "CREATE USER 'root'@'localhost' IDENTIFIED BY 'root7623';"
