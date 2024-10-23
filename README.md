@@ -16,6 +16,7 @@ The Employee Management System is a Spring Boot application designed to manage e
 
 - Java
 - Spring Boot
+- MySQL
 - Spring Data JPA
 - Hibernate
 - Maven
