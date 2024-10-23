@@ -35,16 +35,6 @@ jobs:
       - name: Start MySQL service
         run: sudo service mysql start
 
-      - name: Ensure MySQL service is running
-        run: |
-          sudo service mysql status
-          sudo service mysql restart
-
-      - name: Reset MySQL root password
-        run: |
-          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root7623';"
-          sudo mysql -e "FLUSH PRIVILEGES;"
-
       - name: Create database
         run: |
           mysql -u root -proot7623 -e 'CREATE DATABASE ems;'
