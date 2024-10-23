@@ -25,12 +25,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getEmployeeById(int id) {
-        Employee employeebyId = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
-        return EmployeeMapper.mapToEmployeeDto(employeebyId);
+        Employee employeeById = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        return EmployeeMapper.mapToEmployeeDto(employeeById);
     }
 
     @Override
     public EmployeeDto addEmployee(EmployeeDto employeeDto) {
+        if (employeeDto.getName() == null || employeeDto.getSurname() == null || employeeDto.getEmail() == null) {
+            throw new IllegalArgumentException("Employee name, surname, and email cannot be null");
+        }
+        if (!employeeDto.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Email should be valid");
+        }
         if (employeeRepository.existsByEmail(employeeDto.getEmail())) {
             throw new EmployeeAlreadyExistsException("Employee with email " + employeeDto.getEmail() + " already exists");
         }
