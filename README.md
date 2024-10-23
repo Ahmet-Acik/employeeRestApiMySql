@@ -211,4 +211,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Contact
 
-For any inquiries or issues, please contact Ahmet Acik at [a.acik@icloud.com].
+For any inquiries or issues, please contact Ahmet at [a.acik@icloud.com].
