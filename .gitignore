@@ -7,6 +7,7 @@ target/
 # Ignore the external configuration file
 src/main/resources/application-secret.properties
 
+
 ### STS ###
 .apt_generated
 .classpath
