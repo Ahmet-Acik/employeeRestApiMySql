@@ -38,6 +38,41 @@ git clone https://github.com/Ahmet-Acik/EmployeeManagementSystem.git
 cd EmployeeManagementSystem
 ```
 
+## Configuration
+
+### MySQL Credentials
+
+To keep MySQL credentials secure, we use an external configuration file and environment variables. Follow these steps to set up your credentials:
+
+1. **Create a Separate Configuration File**:
+  - Create a file named `application-secret.properties` in the `src/main/resources` directory.
+  - Add your MySQL credentials to this file:
+
+    ```properties
+    spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+    spring.datasource.username=your_username
+    spring.datasource.password=your_password
+    ```
+
+2. **Update `.gitignore`**:
+  - Ensure that the `application-secret.properties` file is added to `.gitignore` to prevent it from being committed to the repository:
+
+    ```gitignore
+    # Ignore the external configuration file
+    src/main/resources/application-secret.properties
+    ```
+
+3. **Set Environment Variables**:
+  - Alternatively, you can set the following environment variables to configure your MySQL credentials:
+
+    ```sh
+    export DB_URL=jdbc:mysql://localhost:3306/your_database
+    export DB_USERNAME=your_username
+    export DB_PASSWORD=your_password
+    ```
+
+By following these steps, you can keep your credentials secure and not public in your GitHub repository.
+
 ### Build the Project
 
 ```sh
