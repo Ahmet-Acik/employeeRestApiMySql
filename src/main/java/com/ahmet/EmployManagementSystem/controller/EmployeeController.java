@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -26,7 +27,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "409", description = "Employee already exists")
     })
-    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/add")
     public ResponseEntity<EmployeeDto> addEmployee(@Validated @RequestBody EmployeeDto employeeDto) {
         EmployeeDto savedEmployee = employeeService.addEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
@@ -37,7 +39,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Employee found"),
             @ApiResponse(responseCode = "404", description = "Employee not found")
     })
-    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/user/get/{id}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Integer id) {
         EmployeeDto employeeById = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employeeById);
@@ -48,7 +51,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "All employees found"),
             @ApiResponse(responseCode = "404", description = "Employees not found")
     })
-    @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/user/get")
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         List<EmployeeDto> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok(allEmployees);
@@ -59,19 +63,20 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Employee updated"),
             @ApiResponse(responseCode = "404", description = "Employee not found")
     })
-    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PutMapping("/user/update/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") Integer id, @Validated @RequestBody EmployeeDto employeeDto) {
         EmployeeDto updatedEmployee = employeeService.updateEmployee(id, employeeDto);
         return ResponseEntity.ok(updatedEmployee);
     }
-
 
     @Operation(summary = "Delete employee", description = "Delete employee")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Employee deleted"),
             @ApiResponse(responseCode = "404", description = "Employee not found")
     })
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Integer id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
@@ -79,5 +84,4 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
-
 }
